@@ -1,3 +1,5 @@
+package get;
+
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
@@ -6,16 +8,17 @@ import io.restassured.specification.ResponseSpecification;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
-public class RestAssuredSpecGet {
+public class GetTestListResource {
 
     RequestSpecification requestSpec = new RequestSpecBuilder()
             .setBaseUri("https://reqres.in/")
             .setContentType(ContentType.JSON) // same as .header("Content-Type", "application/json")
-            .setBasePath("/api/users/{id}")
+            .setBasePath("/api/unknown")
             .build();
 
     ResponseSpecification responseSpec = new ResponseSpecBuilder()
@@ -24,35 +27,22 @@ public class RestAssuredSpecGet {
             .expectBody("$", hasKey("data"))
             .build();
 
-
-    @Test //Get single user
-    public void restGet() {
-        given()
-                .spec(requestSpec)
-                .pathParam("id", 2)
-                .when()
-                .get()
-                .then()
-                .statusCode(200)
-                .and()
-                .body("data.first_name", equalTo("Janet"))
-                .and()
-                .body("data.last_name", equalTo("Weaver"));
-    }
-
     @Test
-    public void restGet2() {
+    public void restGetListResource() {
         given()
                 .spec(requestSpec)
-                .pathParam("id", 3)
                 .when()
                 .get()
                 .then()
                 .spec(responseSpec)
+                .statusCode(200)
                 .and()
-                .body("data.first_name", equalTo("Emma"))
+                .body("data.name", hasItem("true red"))
                 .and()
-                .body("data.last_name", equalTo("Wong"));
-    }
+                .body("data.name", hasItem("fuchsia rose"));
 
+
+
+
+    }
 }

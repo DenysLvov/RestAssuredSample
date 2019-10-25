@@ -1,3 +1,5 @@
+package post;
+
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
@@ -6,53 +8,37 @@ import io.restassured.specification.ResponseSpecification;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.lessThan;
 
-public class RestAssuredSpecGet {
+public class PostTestCreateUser {
 
     RequestSpecification requestSpec = new RequestSpecBuilder()
             .setBaseUri("https://reqres.in/")
             .setContentType(ContentType.JSON) // same as .header("Content-Type", "application/json")
-            .setBasePath("/api/users/{id}")
+            .setBasePath("/api/users")
             .build();
 
     ResponseSpecification responseSpec = new ResponseSpecBuilder()
-            .expectStatusCode(200)
+            .expectStatusCode(201)
             .expectResponseTime(lessThan(5000L))
-            .expectBody("$", hasKey("data"))
+            .expectBody("$", hasKey("name"))
+            .expectBody("$", hasKey("job"))
             .build();
 
-
-    @Test //Get single user
-    public void restGet() {
-        given()
-                .spec(requestSpec)
-                .pathParam("id", 2)
-                .when()
-                .get()
-                .then()
-                .statusCode(200)
-                .and()
-                .body("data.first_name", equalTo("Janet"))
-                .and()
-                .body("data.last_name", equalTo("Weaver"));
-    }
-
     @Test
-    public void restGet2() {
+    public void restPost() {
         given()
                 .spec(requestSpec)
-                .pathParam("id", 3)
-                .when()
-                .get()
+                .body("{\"name\": \"Oleh\", \"job\": \"Automation\"}")
+                .post()
                 .then()
                 .spec(responseSpec)
                 .and()
-                .body("data.first_name", equalTo("Emma"))
+                .body("name", equalTo("Oleh"))
                 .and()
-                .body("data.last_name", equalTo("Wong"));
+                .body("job", equalTo("Automation"));
     }
-
 }
+
