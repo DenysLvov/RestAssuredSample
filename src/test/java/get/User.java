@@ -24,7 +24,6 @@ public class User {
         this.last_name = last_name;
     }
 
-
     public int getId() {
         return id;
     }
@@ -33,20 +32,12 @@ public class User {
         this.id = id;
     }
 
-
     public String getAvatar() {
         return avatar;
     }
 
-
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-     @Override
-    public String toString() {
-        return String.format("[name:%s; job:%s; id:%s; createdAt:%s]",
-                first_name, id );
     }
 
     public String getEmail() {
@@ -56,4 +47,11 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+     @Override
+    public String toString() {
+        return String.format("[name:%s; job:%s; id:%s; createdAt:%s]",
+                first_name, id );
+    }
+
 }
